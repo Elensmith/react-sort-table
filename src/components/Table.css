@@ -1,0 +1,22 @@
+.table {
+  display: none;
+  margin: auto;
+  border-collapse: separate;
+  max-width: fit-content;
+}
+
+th {
+  background-color: #ccb1c1;
+  /* border: 1px solid black ; */
+  border-collapse: collapse;
+}
+
+td {
+  background-color: white;
+  /* border: 1px solid black ; */
+  border-collapse: collapse;
+}
+
+.table.table_on {
+  display: block;
+}

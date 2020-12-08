@@ -1,0 +1,11 @@
+button {
+margin: 10px 10px 20px 0;
+}
+
+.button_table-style {
+  margin: 0;
+  border: none; 
+  outline: none;
+  background: none;
+  cursor: pointer;
+}
