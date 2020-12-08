@@ -4,13 +4,15 @@ import Button from './Button';
 
 function Table(props) {
 
-  function loadmore() {
+  // console.log(props.data.id);
+  // function loadmore() {
 
-  }
+  // }
 
   React.useEffect(() => {
     return props.load();
   }, []);
+
   return (
     <div className={`table ${props.isOpen ? "table_on" : ""}`}>
       <table >
@@ -19,32 +21,38 @@ function Table(props) {
             <th >
               <Button
                 title="id"
-                className="button_table-style" />
+                className="button_table-style"
+                show={() => props.sortBy("id")} />
             </th>
             <th>
               <Button
                 title="firstName"
-                className="button_table-style" />
+                className="button_table-style"
+                show={() => props.sortBy("firstName")} />
             </th>
             <th>
               <Button
                 title="lastName"
-                className="button_table-style" />
+                className="button_table-style"
+                show={() => props.sortBy("lastName")} />
             </th>
             <th>
               <Button
                 title="email"
-                className="button_table-style" />
+                className="button_table-style"
+                show={() => props.sortBy("email")} />
             </th>
             <th>
               <Button
                 title="phone"
-                className="button_table-style" />
+                className="button_table-style"
+                show={() => props.sortBy("phone")} />
             </th>
           </tr>
         </thead>
         <tbody>
-          {props.data.slice(0, props.visible).map((row, i) => (
+          {props.data.map((row, i) => (
+            // {props.data.slice(0, props.visible).map((row, i) => (
             <tr key={i}>
               <td>{row.id}</td>
               <td>{row.firstName}</td>

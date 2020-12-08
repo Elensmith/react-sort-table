@@ -4,12 +4,15 @@ import Table from './Table';
 import { api } from '../utils/api';
 import Button from './Button';
 import Preloader from './Preloader';
+import Input from "./Input";
 
 function App() {
   const [data, setData] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isTable, setIsTable] = React.useState(false);
+  const [q, setQ] = React.useState("");
   const visible = 50;
+  const columns = data[0] && Object.keys(data[0]);
 
 
   function handlePreloader() {
@@ -21,13 +24,22 @@ function App() {
   }
 
   function sortBy(key) {
-    // data
-    // console.log(key)
+    console.log(data)
+    const newData = data.sort((a, b) => a[key] < b[key]);
+    console.log(newData)
+    setData(newData);
+  }
+
+
+  function filter(data) {
+    return data.filter((row) =>
+      columns.some(
+        (column) => row[column].toString().toLowerCase().indexOf(q) > -1)
+    )
   }
   // показать мало данных
   function showSmallData() {
     handlePreloader();
-    console.log(isLoading);
     api.getSmallData()
       .then((data) => {
         setData(data);
@@ -49,13 +61,14 @@ function App() {
       .catch((err) => {
         return Promise.reject(new Error(`Ошибка: ${err.message}`));
       });
-
   }
 
 
   return (
     <div className="App">
       <h1>sort table</h1>
+      {isTable ? <Input set={setQ} value={q} /> : ""}
+
       <Button
         title="мало данных"
         show={showSmallData}
@@ -65,6 +78,7 @@ function App() {
         show={showBigData}
 
       />
+
       {isTable ? <Button title="добавить строку" /> : ""}
 
       <Preloader isOpen={isLoading} />
@@ -72,7 +86,7 @@ function App() {
       {isTable ?
         <Table
           isOpen={isTable}
-          data={data}
+          data={filter(data)}
           sortBy={sortBy}
           load={handlePreloader}
           visible={visible}
