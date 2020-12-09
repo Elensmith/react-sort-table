@@ -11,9 +11,26 @@ function App() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [isTable, setIsTable] = React.useState(false);
   const [q, setQ] = React.useState("");
-  const visible = 50;
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [linesPerPage, setLinesPerPage] = React.useState(50);
   const columns = data[0] && Object.keys(data[0]);
 
+  // получить данные о текущей странице
+  const indexOfLastLine = currentPage * linesPerPage;
+  const indexOfFirstLine = indexOfLastLine - linesPerPage;
+  const currentLines = data.slice(indexOfFirstLine, indexOfLastLine);
+
+  function previousPage() {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  }
+
+  function nextPage() {
+    if (currentPage >= 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  }
 
   function handlePreloader() {
     setIsLoading(!isLoading);
@@ -24,10 +41,10 @@ function App() {
   }
 
   function sortBy(key) {
-    console.log(data)
-    const newData = data.sort((a, b) => a[key] < b[key]);
-    console.log(newData)
+    // const oldData = data;
+    const newData = data.sort((a, b) => a[key] - b[key]);
     setData(newData);
+    console.log(newData);
   }
 
 
@@ -86,13 +103,15 @@ function App() {
       {isTable ?
         <Table
           isOpen={isTable}
-          data={filter(data)}
+          data={filter(currentLines)}
+          // data={filter(data)}
           sortBy={sortBy}
           load={handlePreloader}
-          visible={visible}
+          visible={linesPerPage}
+          set={data}
         /> : ""}
-      {data.length > visible && isTable ? <Button title="предыдущие" /> : ""}
-      {data.length > visible && isTable ? <Button title="следующие" /> : ""}
+      {data.length > linesPerPage && isTable ? <Button title="предыдущие" show={previousPage} /> : ""}
+      {data.length > linesPerPage && isTable ? <Button title="следующие" show={nextPage} /> : ""}
 
     </div >
   );

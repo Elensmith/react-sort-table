@@ -4,12 +4,15 @@ import Button from './Button';
 
 function Table(props) {
 
-  // console.log(props.data.id);
   // function loadmore() {
 
   // }
+  React.useEffect(() => {
+    return props.setData
+  }, []);
 
   React.useEffect(() => {
+
     return props.load();
   }, []);
 
