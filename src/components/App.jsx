@@ -10,17 +10,19 @@ function App() {
   const [data, setData] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isTable, setIsTable] = React.useState(false);
-  const [q, setQ] = React.useState("");
+  const [searchingValue, setSearchingValue] = React.useState("");
   const [currentPage, setCurrentPage] = React.useState(1);
   const [linesPerPage, setLinesPerPage] = React.useState(50);
   const [count, setCount] = React.useState(0);
 
 
   // получить данные о текущей странице
+
   const columns = data[0] && Object.keys(data[0]);
   const indexOfLastLine = currentPage * linesPerPage;
   const indexOfFirstLine = indexOfLastLine - linesPerPage;
   const currentLines = data.slice(indexOfFirstLine, indexOfLastLine);
+
 
   function previousPage() {
     setCount(count - 1);
@@ -48,15 +50,20 @@ function App() {
   }
 
 
-  function filter(e) {
-    e.preventDefault();
+  function filter(currData) {
+    if (searchingValue) {
+      currData = data;
+    }
+    // e.preventDefault();
     // console.log(data);
-    console.log(e);
+    // console.log(e);
     // setCurrentPage(1);
-    return data.filter((row) =>
+    return currData.filter((row) =>
       columns.some(
-        (column) => row[column].toString().toLowerCase().indexOf(q) > -1)
+        (column) => row[column].toString().toLowerCase().indexOf(searchingValue) > -1)
+
     )
+    // setCurrentPage(1);
     // console.log(data);
   }
   // показать мало данных
@@ -91,8 +98,8 @@ function App() {
   return (
     <div className="App">
       <h1>sort table</h1>
-      {isTable ? <Input set={setQ} value={q} show={filter} /> : ""}
-
+      {isTable ? <Input set={setSearchingValue} value={searchingValue} /> : ""}
+      {/* {isTable ? <Input set={setSearchingValue} value={searchingValue} show={filter} /> : ""} */}
       <Button
         title="мало данных"
         show={showSmallData}
@@ -108,11 +115,12 @@ function App() {
       {isLoading ? <Preloader /> :
         <Table
           isOpen={isTable}
-          // data={filter(currentLines)}
-          data={(currentLines)}
+          data={filter(currentLines)}
+          // data={(currentLines)}
           sortBy={sortBy}
           visible={linesPerPage}
-          set={data} />}
+        // set={data}
+        />}
 
       {data.length > linesPerPage && isTable ? <Button title="предыдущие" show={previousPage} disabled={count >= 1 ? false : true} /> : ""}
       {data.length > linesPerPage && isTable ? <Button title="следующие" show={nextPage} disabled={indexOfLastLine === data.length - linesPerPage ? true : false} /> : ""}
