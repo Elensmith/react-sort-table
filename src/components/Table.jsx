@@ -9,7 +9,6 @@ function Table(props) {
   }, []);
 
   React.useEffect(() => {
-
     return props.load();
   }, []);
 

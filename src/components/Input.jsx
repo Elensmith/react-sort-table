@@ -1,9 +1,13 @@
 import React from 'react';
 import './Input.css';
+import Button from './Button';
 
 function Input(props) {
   return (
-    <input type="text" value={props.value} onChange={(e) => props.set(e.target.value)} placeholder="поиск"></input>
+    <form>
+      <input type="text" value={props.value} onChange={(e) => props.set(e.target.value)} placeholder=""></input>
+      <Button title="Поиск" show={(e) => props.show(e)} />
+    </form>
   )
 }
 

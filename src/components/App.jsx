@@ -52,11 +52,14 @@ function App() {
   }
 
 
-  function filter(data) {
-    return data.filter((row) =>
-      columns.some(
-        (column) => row[column].toString().toLowerCase().indexOf(q) > -1)
-    )
+  function filter(data, e) {
+    e.stopPropagation();
+    console.log(e);
+    // setCurrentPage(1);
+    // return data.filter((row) =>
+    //   columns.some(
+    //     (column) => row[column].toString().toLowerCase().indexOf(q) > -1)
+    // )
   }
   // показать мало данных
   function showSmallData() {
@@ -88,7 +91,7 @@ function App() {
   return (
     <div className="App">
       <h1>sort table</h1>
-      {isTable ? <Input set={setQ} value={q} /> : ""}
+      {isTable ? <Input set={setQ} value={q} show={filter} /> : ""}
 
       <Button
         title="мало данных"
@@ -107,8 +110,8 @@ function App() {
       {isTable ?
         <Table
           isOpen={isTable}
-          data={filter(currentLines)}
-          // data={filter(data)}
+          // data={filter(currentLines)}
+          data={(currentLines)}
           sortBy={sortBy}
           load={handlePreloader}
           visible={linesPerPage}
