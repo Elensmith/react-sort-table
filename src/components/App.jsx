@@ -36,10 +36,6 @@ function App() {
     }
   }
 
-  function handlePreloader() {
-    setIsLoading(!isLoading);
-  }
-
   function handleTable() {
     setIsTable(true);
   }
@@ -52,21 +48,24 @@ function App() {
   }
 
 
-  function filter(data, e) {
-    e.stopPropagation();
+  function filter(e) {
+    e.preventDefault();
+    // console.log(data);
     console.log(e);
     // setCurrentPage(1);
-    // return data.filter((row) =>
-    //   columns.some(
-    //     (column) => row[column].toString().toLowerCase().indexOf(q) > -1)
-    // )
+    return data.filter((row) =>
+      columns.some(
+        (column) => row[column].toString().toLowerCase().indexOf(q) > -1)
+    )
+    // console.log(data);
   }
   // показать мало данных
   function showSmallData() {
-    handlePreloader();
+    setIsLoading(true);
     api.getSmallData()
       .then((data) => {
         setData(data);
+        setIsLoading(false)
         handleTable()
       })
       .catch((err) => {
@@ -76,10 +75,11 @@ function App() {
 
   // показат много данных
   function showBigData() {
-    handlePreloader();
+    setIsLoading(true);
     api.getBigData()
       .then((data) => {
         setData(data);
+        setIsLoading(false)
         handleTable()
       })
       .catch((err) => {
@@ -105,18 +105,15 @@ function App() {
 
       {isTable ? <Button title="добавить строку" /> : ""}
 
-      <Preloader isOpen={isLoading} />
-
-      {isTable ?
+      {isLoading ? <Preloader /> :
         <Table
           isOpen={isTable}
           // data={filter(currentLines)}
           data={(currentLines)}
           sortBy={sortBy}
-          load={handlePreloader}
           visible={linesPerPage}
-          set={data}
-        /> : ""}
+          set={data} />}
+
       {data.length > linesPerPage && isTable ? <Button title="предыдущие" show={previousPage} disabled={count >= 1 ? false : true} /> : ""}
       {data.length > linesPerPage && isTable ? <Button title="следующие" show={nextPage} disabled={indexOfLastLine === data.length - linesPerPage ? true : false} /> : ""}
 

@@ -11,12 +11,12 @@
   height: 80px;
 }
 
-.lds-spinner.lds-spinner_on div{
+/* .lds-spinner.lds-spinner_on div{
   display: block;
-}
+} */
 
 .lds-spinner div {
-  display: none;
+  display: block;
   transform-origin: 40px 40px;
   animation: lds-spinner 1.2s linear infinite;
 }

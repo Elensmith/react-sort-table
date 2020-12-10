@@ -8,10 +8,6 @@ function Table(props) {
     return props.setData
   }, []);
 
-  React.useEffect(() => {
-    return props.load();
-  }, []);
-
   return (
     <div className={`table ${props.isOpen ? "table_on" : ""}`}>
       <table >

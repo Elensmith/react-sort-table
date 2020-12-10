@@ -2,10 +2,10 @@ import React from 'react';
 import "./Preloader.css";
 
 
-function Preloader(props) {
+function Preloader() {
   return (
     <div className="preloader">
-      <div className={`lds-spinner ${props.isOpen ? "lds-spinner_on" : ""}`}><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+      <div className="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
     </div>
   )
 }
