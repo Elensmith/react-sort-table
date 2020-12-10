@@ -4,9 +4,6 @@ import Button from './Button';
 
 function Table(props) {
 
-  // function loadmore() {
-
-  // }
   React.useEffect(() => {
     return props.setData
   }, []);
@@ -55,7 +52,6 @@ function Table(props) {
         </thead>
         <tbody>
           {props.data.map((row, i) => (
-            // {props.data.slice(0, props.visible).map((row, i) => (
             <tr key={i}>
               <td>{row.id}</td>
               <td>{row.firstName}</td>

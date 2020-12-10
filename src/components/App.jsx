@@ -13,20 +13,24 @@ function App() {
   const [q, setQ] = React.useState("");
   const [currentPage, setCurrentPage] = React.useState(1);
   const [linesPerPage, setLinesPerPage] = React.useState(50);
-  const columns = data[0] && Object.keys(data[0]);
+  const [count, setCount] = React.useState(0);
+
 
   // получить данные о текущей странице
+  const columns = data[0] && Object.keys(data[0]);
   const indexOfLastLine = currentPage * linesPerPage;
   const indexOfFirstLine = indexOfLastLine - linesPerPage;
   const currentLines = data.slice(indexOfFirstLine, indexOfLastLine);
 
   function previousPage() {
+    setCount(count - 1);
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
     }
   }
 
   function nextPage() {
+    setCount(count + 1);
     if (currentPage >= 1) {
       setCurrentPage(currentPage + 1);
     }
@@ -44,7 +48,7 @@ function App() {
     // const oldData = data;
     const newData = data.sort((a, b) => a[key] - b[key]);
     setData(newData);
-    console.log(newData);
+    // console.log(newData);
   }
 
 
@@ -110,8 +114,8 @@ function App() {
           visible={linesPerPage}
           set={data}
         /> : ""}
-      {data.length > linesPerPage && isTable ? <Button title="предыдущие" show={previousPage} /> : ""}
-      {data.length > linesPerPage && isTable ? <Button title="следующие" show={nextPage} /> : ""}
+      {data.length > linesPerPage && isTable ? <Button title="предыдущие" show={previousPage} disabled={count >= 1 ? false : true} /> : ""}
+      {data.length > linesPerPage && isTable ? <Button title="следующие" show={nextPage} disabled={indexOfLastLine === data.length - linesPerPage ? true : false} /> : ""}
 
     </div >
   );
