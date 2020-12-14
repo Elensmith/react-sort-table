@@ -5,6 +5,7 @@ import { api } from '../utils/api';
 import Button from './Button';
 import Preloader from './Preloader';
 import Input from "./Input";
+import UserInfo from "./UserInfo";
 
 function App() {
   const [data, setData] = React.useState([]);
@@ -14,7 +15,9 @@ function App() {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [linesPerPage, setLinesPerPage] = React.useState(50);
   const [count, setCount] = React.useState(0);
-
+  const [sort, setSort] = React.useState("");
+  const [key, setKey] = React.useState("");
+  const [rowInfo, setRowInfo] = React.useState();
 
   // получить данные о текущей странице
 
@@ -23,6 +26,18 @@ function App() {
   const indexOfFirstLine = indexOfLastLine - linesPerPage;
   const currentLines = data.slice(indexOfFirstLine, indexOfLastLine);
 
+  function handleSortWay() {
+    if (sort === "asc") {
+      return String.fromCharCode(8595);
+    }
+    if (sort === "desc") {
+      return String.fromCharCode(8593);
+    }
+  }
+
+  function handleSelectedRow(row) {
+    setRowInfo(row)
+  }
 
   function previousPage() {
     setCount(count - 1);
@@ -43,10 +58,39 @@ function App() {
   }
 
   function sortBy(key) {
-    // const oldData = data;
-    const newData = data.sort((a, b) => a[key] - b[key]);
+    const sortType = sort === "asc" ? setSort("desc") : setSort("asc");
+    setKey(key);
+
+    const newData = data.sort((a, b) => {
+      if (key === "id") {
+
+        if (sort === "asc") {
+          return b[key] - a[key]
+        } else {
+          return a[key] - b[key]
+        }
+      }
+      else {
+        if (sort === "asc") {
+          if (a[key].toLowerCase() > b[key].toLowerCase()) {
+            return -1;
+          }
+          if (a[key].toLowerCase() < b[key].toLowerCase()) {
+            return 1;
+          }
+          return 0;
+        } else {
+          if (a[key].toLowerCase() > b[key].toLowerCase()) {
+            return 1;
+          }
+          if (a[key].toLowerCase() < b[key].toLowerCase()) {
+            return -1;
+          }
+          return 0;
+        }
+      }
+    });
     setData(newData);
-    // console.log(newData);
   }
 
 
@@ -55,19 +99,15 @@ function App() {
       currData = data;
     }
     // e.preventDefault();
-    // console.log(data);
-    // console.log(e);
     // setCurrentPage(1);
     return currData.filter((row) =>
       columns.some(
         (column) => row[column].toString().toLowerCase().indexOf(searchingValue) > -1)
-
     )
-    // setCurrentPage(1);
-    // console.log(data);
   }
   // показать мало данных
   function showSmallData() {
+    setRowInfo();
     setIsLoading(true);
     api.getSmallData()
       .then((data) => {
@@ -82,6 +122,7 @@ function App() {
 
   // показат много данных
   function showBigData() {
+    setRowInfo();
     setIsLoading(true);
     api.getBigData()
       .then((data) => {
@@ -116,12 +157,21 @@ function App() {
         <Table
           isOpen={isTable}
           data={filter(currentLines)}
-          // data={(currentLines)}
           sortBy={sortBy}
           visible={linesPerPage}
-        // set={data}
+          sortWay={handleSortWay()}
+          keyNow={key}
+          selectedRowInfo={handleSelectedRow}
         />}
-
+      {rowInfo ? <UserInfo
+        firstName={rowInfo.firstName}
+        lastName={rowInfo.lastName}
+        description={rowInfo.description}
+        streetAddress={rowInfo.address.streetAddress}
+        city={rowInfo.address.city}
+        state={rowInfo.address.state}
+        zip={rowInfo.address.zip}
+      /> : ""}
       {data.length > linesPerPage && isTable ? <Button title="предыдущие" show={previousPage} disabled={count >= 1 ? false : true} /> : ""}
       {data.length > linesPerPage && isTable ? <Button title="следующие" show={nextPage} disabled={indexOfLastLine === data.length - linesPerPage ? true : false} /> : ""}
 

@@ -7,16 +7,21 @@
 
 th {
   background-color: #ccb1c1;
-  /* border: 1px solid black ; */
+  height: 20px;
   border-collapse: collapse;
 }
 
 td {
   background-color: white;
   /* border: 1px solid black ; */
+  height: 20px;
   border-collapse: collapse;
 }
 
 .table.table_on {
   display: block;
+}
+
+table {
+  width: 730px;
 }
